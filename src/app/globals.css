@@ -1,0 +1,528 @@
+@import "tailwindcss";
+
+/* niedrige Bildschirme (Laptops) – Präsentationsfläche kompakter */
+@custom-variant short (@media (max-height: 860px));
+@custom-variant tiny (@media (max-height: 720px));
+
+/* ------------------------------------------------------------------
+   YOGITIER® Design-Tokens (aus dem Menü-Mockup & der Markenwelt)
+   ------------------------------------------------------------------ */
+@theme {
+  --font-sans: var(--font-quicksand), ui-rounded, "Segoe UI", system-ui, sans-serif;
+
+  --color-ink: #7a4a28;
+  --color-ink-strong: #5a3218;
+  --color-ink-soft: #9b7a62;
+  --color-line: #e6d9cc;
+  --color-cream: #faf6f1;
+  --color-sand: #f6f3ec;
+
+  /* Kacheln im Menü */
+  --color-yoga: #efe2d4;
+  --color-meditation: #e7e2f8;
+  --color-tierfreunde: #fbebc4;
+  --color-memo: #fbf1be;
+  --color-tagebuch: #e8e8f0;
+  --color-besonderes: #fbe3e6;
+
+  --color-lilac: #a99bf0;
+  --color-lilac-ink: #2f2360;
+
+  /* Farben des Logos */
+  --color-brand-lavender: #a6a3d2;
+  --color-brand-orange: #e8961e;
+  --color-brand-brown: #a8714f;
+  --color-brand-yellow: #f1dd4b;
+  --color-brand-pink: #e9879e;
+  --color-brand-sky: #b4dce4;
+  --color-brand-teal: #487270;
+  --color-brand-red: #e0612a;
+
+  --radius-tile: 28px;
+  --radius-card: 24px;
+
+  --animate-float: float 4.5s ease-in-out infinite;
+  --animate-pop: pop 420ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-fade-up: fade-up 480ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-wiggle: wiggle 1.2s ease-in-out infinite;
+  --animate-spin-slow: spin 18s linear infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-1.5deg);
+  }
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes snow {
+  from {
+    transform: translate3d(0, -12px, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(var(--drift, 12px), 520px, 0) rotate(240deg);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  100% {
+    opacity: 0.9;
+    transform: translate3d(var(--dx, 0px), var(--dy, 700px), 0) rotate(var(--rot, 540deg));
+  }
+}
+
+@keyframes drift-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(18px, -10px, 0);
+  }
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes bubble {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.6);
+  }
+  12% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift, 10px), -105cqh, 0) scale(1.1);
+  }
+}
+
+@keyframes sway {
+  0%,
+  100% {
+    transform: rotate(calc(var(--base, 0deg) - 4deg));
+  }
+  50% {
+    transform: rotate(calc(var(--base, 0deg) + 4deg));
+  }
+}
+
+@keyframes shoot {
+  0%,
+  86% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(-220px, 120px, 0);
+  }
+}
+
+@keyframes node-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(255 255 255 / 0.85);
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgb(255 255 255 / 0);
+  }
+}
+
+@keyframes card-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-4px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Basis
+   ------------------------------------------------------------------ */
+/* Abstände für Statusleiste/Home-Indikator: mobil aus dem Gerät, im Präsentations-Rahmen fest.
+   Bewusst ohne Layer, damit die Reihenfolge eindeutig ist. */
+:root {
+  --safe-top: max(env(safe-area-inset-top), 14px);
+  --safe-bottom: max(env(safe-area-inset-bottom), 18px);
+}
+
+@media (min-width: 768px) {
+  :root {
+    --safe-top: 52px;
+    --safe-bottom: 30px;
+  }
+}
+
+/* Basis-Stile im Layer „base“, damit Tailwind-Utilities sie überschreiben können */
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior: none;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: #fbebc4;
+    color: var(--color-ink-strong);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-lilac);
+    outline-offset: 2px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: default;
+  }
+}
+
+@layer components {
+  /* ------------------------------------------------------------------
+     Präsentations-Bühne & Geräterahmen
+     Mobil: App im Vollbild. Ab 768px: Handy-Rahmen + Präsentation.
+     ------------------------------------------------------------------ */
+  .stage {
+    min-height: 100dvh;
+  }
+
+  .device {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+  }
+
+  .app-screen {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+    /* macht den Screen zum Bezugsrahmen für position: fixed (Sheets, Overlays) */
+    transform: translateZ(0);
+    /* erlaubt Größenangaben relativ zum Screen (cqw / cqh) */
+    container-type: size;
+  }
+
+  .device-chrome {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .stage {
+      height: 100dvh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(32px, 6vw, 96px);
+      padding: 24px;
+      background:
+        radial-gradient(circle at 12% 18%, #fbebc4 0, transparent 34%),
+        radial-gradient(circle at 88% 82%, #e7e2f8 0, transparent 36%),
+        radial-gradient(circle at 92% 10%, #fbe3e6 0, transparent 22%),
+        var(--color-cream);
+    }
+
+    .device {
+      flex-shrink: 0;
+      width: 414px;
+      height: min(868px, calc(100dvh - 48px));
+      padding: 12px;
+      border-radius: 62px;
+      background: linear-gradient(145deg, #3a2c24, #1f1712);
+      box-shadow:
+        0 0 0 2px #4d3b30 inset,
+        0 40px 80px -24px rgb(90 50 24 / 0.45),
+        0 18px 36px -18px rgb(90 50 24 / 0.35);
+    }
+
+    .app-screen {
+      border-radius: 50px;
+    }
+
+    .device-chrome {
+      display: block;
+      position: absolute;
+      inset: 0;
+      z-index: 60;
+      pointer-events: none;
+      view-transition-name: device-chrome;
+    }
+  }
+
+  /* Jede Seite scrollt in ihrem eigenen Container (bleibt bei Navigation erhalten). */
+  .screen {
+    position: absolute;
+    inset: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .screen::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pt-safe {
+    padding-top: var(--safe-top);
+  }
+
+  .pb-safe {
+    padding-bottom: var(--safe-bottom);
+  }
+
+  /* ------------------------------------------------------------------
+     Memo-Karten (3D-Flip)
+     ------------------------------------------------------------------ */
+  .flip-card {
+    perspective: 900px;
+  }
+
+  .flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .flip-card[data-flipped="true"] .flip-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .flip-face-front {
+    transform: rotateY(180deg);
+  }
+
+  /* ------------------------------------------------------------------
+     Yoga-Würfel (3D)
+     ------------------------------------------------------------------ */
+  .dice-scene {
+    perspective: 900px;
+  }
+
+  .dice {
+    position: relative;
+    width: var(--dice-size);
+    height: var(--dice-size);
+    transform-style: preserve-3d;
+    transition: transform 1600ms cubic-bezier(0.18, 0.9, 0.24, 1.04);
+  }
+
+  .dice-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+}
+
+/* ------------------------------------------------------------------
+   View Transitions (Seitenwechsel wie in einer nativen App)
+   ------------------------------------------------------------------ */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-image-pair(.nav-forward),
+::view-transition-image-pair(.nav-back) {
+  overflow: clip;
+}
+
+::view-transition-old(.nav-forward) {
+  --slide-offset: -48px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    360ms cubic-bezier(0.22, 1, 0.36, 1) both vt-slide reverse;
+}
+
+::view-transition-new(.nav-forward) {
+  --slide-offset: 48px;
+  animation:
+    220ms ease-out 110ms both vt-fade,
+    360ms cubic-bezier(0.22, 1, 0.36, 1) both vt-slide;
+}
+
+::view-transition-old(.nav-back) {
+  --slide-offset: 48px;
+  animation:
+    150ms ease-in both vt-fade reverse,
+    360ms cubic-bezier(0.22, 1, 0.36, 1) both vt-slide reverse;
+}
+
+::view-transition-new(.nav-back) {
+  --slide-offset: -48px;
+  animation:
+    220ms ease-out 110ms both vt-fade,
+    360ms cubic-bezier(0.22, 1, 0.36, 1) both vt-slide;
+}
+
+::view-transition-group(.morph) {
+  animation-duration: 420ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+::view-transition-group(device-chrome) {
+  animation: none;
+  z-index: 100;
+}
+
+::view-transition-old(device-chrome) {
+  display: none;
+}
+
+::view-transition-new(device-chrome) {
+  animation: none;
+}
+
+@keyframes vt-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vt-slide {
+  from {
+    translate: var(--slide-offset);
+  }
+  to {
+    translate: 0;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Barrierefreiheit: weniger Bewegung
+   ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

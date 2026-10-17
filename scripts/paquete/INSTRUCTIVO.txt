@@ -1,0 +1,81 @@
+YOGITIER - Prototipo · avance del {{FECHA}}
+==============================================
+
+App de yoga y mindfulness para niños (en alemán) y YOGITIER Studio, el panel
+donde el administrador sube vídeos instructivos y diseña "Lernwelten" (mundos
+de aprendizaje) para enseñar hábitos saludables de forma activa.
+Se prueba en local y no hay que instalar nada.
+
+
+1. ABRIRLO (Windows 10/11)
+--------------------------
+1) Clic derecho sobre el ZIP > "Extraer todo..." > Extraer.
+   Hay que extraerlo primero: desde dentro del ZIP no arranca.
+2) En la carpeta "YOGITIER-Prototipo", doble clic en "Iniciar YOGITIER.bat".
+   Si Windows avisa ("Windows protegió su PC"), pulsa "Más información" >
+   "Ejecutar de todas formas".
+3) Se abre una ventana negra y, a los pocos segundos, el navegador con
+   http://localhost:{{PUERTO}}
+   Deja la ventana negra abierta mientras pruebas. Para terminar, ciérrala.
+
+- Mejor en Microsoft Edge o Google Chrome. Sube el volumen: hay voz en
+  alemán, sonidos y música de ambiente (con internet la voz suena más natural).
+- Mac o Linux: instala Node.js 20 o superior (nodejs.org), abre la Terminal en
+  la carpeta "YOGITIER-Prototipo" y ejecuta:   node runtime/iniciar.mjs
+
+
+2. QUÉ PROBAR (unos 10 minutos)
+-------------------------------
+En el ordenador la app se muestra dentro de un móvil, con un panel de
+presentación a la izquierda.
+
+App de los niños
+ a) La primera vez pide el nombre del niño y su animal favorito.
+ b) Menú "Was möchtest du machen?" (¿Qué quieres hacer?): Yoga, Meditation,
+    Tierfreunde (los animales), Memo, Tagebuch (diario), Besonderes (especial).
+ c) Besonderes > "Dschungel-Bewegungspause": un camino de estaciones en la
+    selva. A los 12 segundos el vídeo se para solo ("Jetzt du!" = ¡ahora tú!)
+    con cuenta atrás y voz. Siguen una postura, un desfile de animales con
+    temporizador, un quiz y una respiración. Al final: celebración, estrellas
+    y un sticker para el álbum.
+ d) Hay más Lernwelten, cada una con su escenario y su sonido: lavarse los
+    dientes, beber agua y una relajación para dormir.
+ e) El candado (arriba a la derecha) abre el área de padres resolviendo una
+    multiplicación. "Demo-Daten laden" la rellena con una semana de ejemplo.
+
+YOGITIER Studio (administración)
+ f) Abre http://localhost:{{PUERTO}}/admin o el botón "YOGITIER Studio für
+    Admins" del panel izquierdo. PIN: 1234
+ g) Lernwelten > abre una > sección "Umgebung" (entorno): cambia el escenario
+    (selva, fondo del mar, espacio, bosque, pradera, invierno, arcoíris,
+    playa), el color, el sonido de fondo ("Probe" = escuchar) y el animal
+    guía. La vista previa en el móvil cambia al instante.
+ h) "Neue Lernwelt" > plantilla "Bewegungspause". En la estación
+    "Mitmach-Video": "Hochladen" (subir) un vídeo MP4 propio, reprodúcelo y
+    pulsa "Stopp an aktueller Stelle" para añadir una pausa "Jetzt du!".
+ i) "Veröffentlichen" (publicar) y vuelve a la app con "App öffnen": la nueva
+    Lernwelt ya aparece en Besonderes.
+
+
+3. BUENO SABER
+--------------
+- Es un prototipo sin nube: perfil, progreso, Lernwelten y vídeos se guardan
+  en el navegador de este equipo. Usa siempre el mismo navegador y la misma
+  dirección (http://localhost:{{PUERTO}}).
+- Para volver a empezar: Studio > Einstellungen > "Beispiel-Lernwelten
+  wiederherstellen" o "Studio zurücksetzen". En el área de padres:
+  "Alle Daten löschen".
+- Los vídeos de YouTube o Vimeo se pueden enlazar, pero las pausas
+  "Jetzt du!" solo funcionan con vídeos subidos o con enlaces MP4.
+- Las profesoras del buscador son perfiles ficticios de ejemplo.
+- Si el puerto {{PUERTO}} está ocupado se usa el siguiente; la ventana negra
+  muestra la dirección correcta.
+
+
+Contenido de la carpeta
+  Iniciar YOGITIER.bat   arranca la app (Windows)
+  app\                   la aplicación ya compilada (Next.js)
+  runtime\               Node.js portátil y el lanzador
+  codigo-fuente\         código fuente (Next.js + TypeScript):
+                         npm install  y luego  npm run dev
+  GitHub: https://github.com/14-David-06/yogitier · versión {{COMMIT}}
