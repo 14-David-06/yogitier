@@ -156,7 +156,7 @@ El texto del instructivo está en `scripts/paquete/INSTRUCTIVO.txt`.
 ```bash
 npm run lint        # ESLint (incluye las reglas del React Compiler)
 npm run typecheck   # TypeScript
-npm run build       # build de producción (92 páginas pregeneradas)
+npm run build       # build de producción (93 páginas pregeneradas)
 npm run check       # los tres seguidos
 npm run e2e         # 24 pruebas de extremo a extremo (Playwright + Microsoft Edge) contra http://localhost:3000
 ```
