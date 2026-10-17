@@ -1,6 +1,7 @@
 import { useSyncExternalStore } from "react";
 
 import type { AnimalId, MoodId } from "@/content/types";
+import { forgetTours } from "@/lib/guide/store";
 
 /**
  * Lokaler App-Speicher (localStorage). Alle Daten bleiben auf dem Gerät –
@@ -214,6 +215,8 @@ export function addTeacherRequest(teacherId: string) {
 
 export function resetAppState() {
   updateAppState(() => DEFAULT_STATE);
+  // Emmis Touren starten danach wieder von selbst
+  forgetTours("kids");
 }
 
 // ---------------------------------------------------------------------------

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ViewTransition } from "react";
 
 import logo from "@/assets/brand/logo.png";
+import { GuideButton } from "@/components/guide/guide-button";
 import { SpecialBadge } from "@/components/home/special-badge";
 import { AppLink } from "@/components/ui/app-link";
 import { Screen } from "@/components/ui/screen";
@@ -24,11 +25,12 @@ export default function HomePage() {
       <div className="flex min-h-full flex-col">
         <div className="flex items-center justify-between px-5 pt-safe">
           <div className="flex h-[54px] w-full items-center justify-between">
-            <span className="w-10" />
+            <GuideButton />
             <Image src={logo} alt="YOGITIER®" className="h-7 w-auto" loading="eager" />
             <AppLink
               href="/eltern"
               aria-label="Eltern-Bereich"
+              data-tour="eltern"
               className="grid size-10 place-items-center rounded-full text-ink-soft transition hover:bg-cream active:scale-95"
             >
               <Lock className="size-[22px]" strokeWidth={1.6} aria-hidden />
@@ -45,6 +47,7 @@ export default function HomePage() {
               <AppLink
                 key={t.href}
                 href={t.href}
+                data-tour={`kachel-${t.href.slice(1)}`}
                 className="group relative flex flex-col items-center justify-center gap-3 rounded-tile text-ink no-underline transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_10px_24px_-14px_rgb(122_74_40/0.45)] active:scale-[0.97]"
                 style={{ background: t.bg }}
               >

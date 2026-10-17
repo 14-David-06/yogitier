@@ -4,24 +4,32 @@ YOGITIER - Prototipo · avance del {{FECHA}}
 App de yoga y mindfulness para niños (en alemán) y YOGITIER Studio, el panel
 donde el administrador sube vídeos instructivos y diseña "Lernwelten" (mundos
 de aprendizaje) para enseñar hábitos saludables de forma activa.
-Se prueba en local y no hay que instalar nada.
+Novedad: Emmi, una guía con forma de unicornio que hace un tour con voz y
+responde preguntas. No hay que instalar nada.
 
 
-1. ABRIRLO (Windows 10/11)
---------------------------
+1. ABRIRLO (dos opciones)
+-------------------------
+OPCIÓN A · La más fácil: versión HTML   ({{ZIP_HTML}})
 1) Clic derecho sobre el ZIP > "Extraer todo..." > Extraer.
-   Hay que extraerlo primero: desde dentro del ZIP no arranca.
+2) Abre la carpeta "YOGITIER-HTML" y haz doble clic en "YOGITIER.html".
+   La app se abre en el navegador. La carpeta "archivos" debe quedarse
+   junto al HTML.
+
+OPCIÓN B · Con servidor local   ({{ZIP_SERVIDOR}})
+Es exactamente la versión que se publicará en internet.
+1) Clic derecho sobre el ZIP > "Extraer todo..." > Extraer.
 2) En la carpeta "YOGITIER-Prototipo", doble clic en "Iniciar YOGITIER.bat".
    Si Windows muestra un aviso de seguridad, pulsa "Más información" >
    "Ejecutar de todas formas" (o "Ejecutar", según el aviso).
 3) Se abre una ventana negra y, a los pocos segundos, el navegador con
    http://localhost:{{PUERTO}}
    Deja la ventana negra abierta mientras pruebas. Para terminar, ciérrala.
+   Mac o Linux: con Node.js 20 o superior (nodejs.org), abre la Terminal en
+   la carpeta "YOGITIER-Prototipo" y ejecuta:   node runtime/iniciar.mjs
 
 - Mejor en Microsoft Edge o Google Chrome. Sube el volumen: hay voz en
   alemán, sonidos y música de ambiente (con internet la voz suena más natural).
-- Mac o Linux: instala Node.js 20 o superior (nodejs.org), abre la Terminal en
-  la carpeta "YOGITIER-Prototipo" y ejecuta:   node runtime/iniciar.mjs
 
 
 2. QUÉ PROBAR (unos 10 minutos)
@@ -29,53 +37,71 @@ Se prueba en local y no hay que instalar nada.
 En el ordenador la app se muestra dentro de un móvil, con un panel de
 presentación a la izquierda.
 
+Emmi, la guía
+ a) Tras la bienvenida (nombre y animal favorito del niño), Emmi ofrece un
+    tour: "Ja, zeig's mir!" (sí, enséñamelo) o "Später" (más tarde). Explica
+    cada parte con su voz; "Überspringen" lo salta en cualquier momento.
+ b) Para preguntar, toca a Emmi (arriba en la pantalla). Prueba:
+    "Was kann ich machen?", "Ich bin wütend" o "Erzähl einen Witz".
+    Responde hablando y ofrece botones para ir directo. Con el micrófono
+    también se puede preguntar en voz alta.
+ c) En el ordenador, "Neu: Emmi zeigt dir alles" (panel izquierdo) repite el
+    tour. Emmi también guía en el Studio y en la primera Lernwelt.
+
 App de los niños
- a) La primera vez pide el nombre del niño y su animal favorito.
- b) Menú "Was möchtest du machen?" (¿Qué quieres hacer?): Yoga, Meditation,
+ d) Menú "Was möchtest du machen?" (¿Qué quieres hacer?): Yoga, Meditation,
     Tierfreunde (los animales), Memo, Tagebuch (diario), Besonderes (especial).
- c) Besonderes > "Dschungel-Bewegungspause": un camino de estaciones en la
+ e) Besonderes > "Dschungel-Bewegungspause": un camino de estaciones en la
     selva. A los 12 segundos el vídeo se para solo ("Jetzt du!" = ¡ahora tú!)
     con cuenta atrás y voz. Siguen una postura, un desfile de animales con
     temporizador, un quiz y una respiración. Al final: celebración, estrellas
     y un sticker para el álbum.
- d) Hay más Lernwelten, cada una con su escenario y su sonido: lavarse los
+ f) Hay más Lernwelten, cada una con su escenario y su sonido: lavarse los
     dientes, beber agua y una relajación para dormir.
- e) El candado (arriba a la derecha) abre el área de padres resolviendo una
+ g) El candado (arriba a la derecha) abre el área de padres resolviendo una
     multiplicación. "Demo-Daten laden" la rellena con una semana de ejemplo.
 
 YOGITIER Studio (administración)
- f) Abre http://localhost:{{PUERTO}}/admin o el botón "YOGITIER Studio für
-    Admins" del panel izquierdo. PIN: 1234
- g) Lernwelten > abre una > sección "Umgebung" (entorno): cambia el escenario
+ h) Botón "YOGITIER Studio für Admins" del panel izquierdo (o la dirección
+    .../admin). PIN: 1234. Emmi ofrece un tour del Studio; abajo a la derecha
+    está "Frag Emmi": pregúntale "Was fehlt noch?" dentro de una Lernwelt y
+    te dice qué falta antes de publicar.
+ i) Lernwelten > abre una > "Umgebung" (entorno): cambia el escenario
     (selva, fondo del mar, espacio, bosque, pradera, invierno, arcoíris,
     playa), el color, el sonido de fondo ("Probe" = escuchar) y el animal
     guía. La vista previa en el móvil cambia al instante.
- h) "Neue Lernwelt" > plantilla "Bewegungspause". En la estación
+ j) "Neue Lernwelt" > plantilla "Bewegungspause". En la estación
     "Mitmach-Video": "Hochladen" (subir) un vídeo MP4 propio, reprodúcelo y
     pulsa "Stopp an aktueller Stelle" para añadir una pausa "Jetzt du!".
- i) "Veröffentlichen" (publicar) y vuelve a la app con "App öffnen": la nueva
+ k) "Veröffentlichen" (publicar) y vuelve a la app con "App öffnen": la nueva
     Lernwelt ya aparece en Besonderes.
 
 
 3. BUENO SABER
 --------------
 - Es un prototipo sin nube: perfil, progreso, Lernwelten y vídeos se guardan
-  en el navegador de este equipo. Usa siempre el mismo navegador y la misma
-  dirección (http://localhost:{{PUERTO}}).
+  en el navegador de este equipo. Usa siempre el mismo navegador. La versión
+  HTML y la versión con servidor no comparten datos entre sí.
+- Emmi responde con su propio conocimiento (funciona sin internet). En la
+  versión final se puede conectar a una inteligencia artificial real.
 - Para volver a empezar: Studio > Einstellungen > "Beispiel-Lernwelten
   wiederherstellen" o "Studio zurücksetzen". En el área de padres:
-  "Alle Daten löschen".
+  "Alle Daten löschen" (también vuelve a mostrar los tours de Emmi).
 - Los vídeos de YouTube o Vimeo se pueden enlazar, pero las pausas
   "Jetzt du!" solo funcionan con vídeos subidos o con enlaces MP4.
 - Las profesoras del buscador son perfiles ficticios de ejemplo.
-- Si el puerto {{PUERTO}} está ocupado se usa el siguiente; la ventana negra
-  muestra la dirección correcta.
+- Opción B: si el puerto {{PUERTO}} está ocupado se usa el siguiente; la
+  ventana negra muestra la dirección correcta.
 
 
-Contenido de la carpeta
-  Iniciar YOGITIER.bat   arranca la app (Windows)
-  app\                   la aplicación ya compilada (Next.js)
-  runtime\               Node.js portátil y el lanzador
-  codigo-fuente\         código fuente (Next.js + TypeScript):
-                         npm install  y luego  npm run dev
-  GitHub: https://github.com/14-David-06/yogitier · versión {{COMMIT}}
+Contenido
+  {{ZIP_HTML}}
+    YOGITIER.html          abre la app (doble clic)
+    archivos\              la app y sus imágenes, vídeos y fuentes
+  {{ZIP_SERVIDOR}}
+    Iniciar YOGITIER.bat   arranca la app (Windows)
+    app\                   la aplicación compilada (Next.js)
+    runtime\               Node.js portátil y el lanzador
+    codigo-fuente\         código fuente (Next.js + TypeScript):
+                           npm install  y luego  npm run dev
+  GitHub: https://github.com/Kracnaro/yogitier · versión {{COMMIT}}

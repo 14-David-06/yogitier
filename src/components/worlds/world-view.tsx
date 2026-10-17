@@ -164,7 +164,7 @@ export function WorldView({ id }: { id: string }) {
         <div className="px-5 pt-2">
           <h1 className={cn("text-[28px] font-bold leading-tight drop-shadow-sm", textColor)}>{world.title}</h1>
           <p className={cn("mt-1 text-[14px] font-semibold", t.dark ? "text-white/80" : "text-ink")}>{world.subtitle}</p>
-          <div className="mt-4 flex items-end gap-3">
+          <div className="mt-4 flex items-end gap-3" data-tour="welt-begleiter">
             <Image src={guide.image} alt={guide.fullName} className="h-24 w-24 shrink-0 object-contain animate-float drop-shadow-md" sizes="96px" loading="eager" />
             <button
               type="button"
@@ -177,7 +177,7 @@ export function WorldView({ id }: { id: string }) {
               </span>
             </button>
           </div>
-          <div className="rounded-[20px] bg-white/90 p-3 shadow-sm">
+          <div className="rounded-[20px] bg-white/90 p-3 shadow-sm" data-tour="welt-fortschritt">
             <div className="flex items-center justify-between text-[13px] font-bold text-ink">
               <span>
                 {doneCount} von {world.steps.length} Stationen
@@ -209,6 +209,7 @@ export function WorldView({ id }: { id: string }) {
                   <button
                     type="button"
                     onClick={() => setActive(s.id)}
+                    data-tour={isNext ? "welt-station" : undefined}
                     aria-label={`Station ${i + 1}: ${s.title}${isDone ? " (geschafft)" : ""}`}
                     className="group flex w-[150px] flex-col items-center"
                   >

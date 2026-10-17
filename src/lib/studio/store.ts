@@ -1,6 +1,7 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 
 import { DEFAULT_SETTINGS, newId, seedWorlds } from "@/content/worlds";
+import { forgetTours } from "@/lib/guide/store";
 
 import * as db from "./db";
 import type { MediaMeta, Step, StudioSettings, World } from "./types";
@@ -146,6 +147,7 @@ export async function restoreExamples() {
 
 export async function resetStudio() {
   await db.clearAll();
+  forgetTours("studio");
   started = false;
   await changed();
 }

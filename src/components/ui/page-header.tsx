@@ -1,6 +1,7 @@
 import { ChevronLeft } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { GuideButton } from "@/components/guide/guide-button";
 import { cn } from "@/lib/cn";
 
 import { AppLink } from "./app-link";
@@ -33,7 +34,7 @@ export function PageHeader({
           <ChevronLeft className="size-6" strokeWidth={2} aria-hidden />
         </AppLink>
         <h1 className="min-w-0 flex-1 truncate text-center text-[17px] font-bold text-ink">{title}</h1>
-        <div className="flex size-11 shrink-0 items-center justify-center">{right}</div>
+        <div className="flex size-11 shrink-0 items-center justify-center">{right ?? <GuideButton className="size-11" />}</div>
       </div>
     </header>
   );

@@ -4,9 +4,24 @@ import { cn } from "@/lib/cn";
 
 /** Bausteine der Studio-Oberfläche (Admin) im YOGITIER®-Look */
 
-export function Card({ title, subtitle, action, children, className }: { title?: string; subtitle?: string; action?: ReactNode; children: ReactNode; className?: string }) {
+export function Card({
+  title,
+  subtitle,
+  action,
+  children,
+  className,
+  tour,
+}: {
+  title?: string;
+  subtitle?: string;
+  action?: ReactNode;
+  children: ReactNode;
+  className?: string;
+  /** Ziel für Emmis Tour */
+  tour?: string;
+}) {
   return (
-    <section className={cn("rounded-[24px] bg-white p-5 ring-1 ring-line sm:p-6", className)}>
+    <section data-tour={tour} className={cn("rounded-[24px] bg-white p-5 ring-1 ring-line sm:p-6", className)}>
       {(title || action) && (
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>

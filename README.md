@@ -8,6 +8,8 @@ Está pensada para **presentarla a clientes** en local y, más adelante, despleg
 - En **tablet/escritorio** se muestra dentro de un marco de iPhone con un panel de presentación al lado.
 - Incluye el **YOGITIER® Studio** (`/admin`): el administrador sube vídeos instructivos, diseña *Lernwelten*
   (mundos de aprendizaje) con su propio ambiente y las publica con un clic en la app infantil.
+- **Emmi**, la guía con forma de unicornio: tour con voz la primera vez (se puede omitir) y preguntas y respuestas,
+  tanto en la app infantil como en el Studio.
 
 ---
 
@@ -31,6 +33,20 @@ Está pensada para **presentarla a clientes** en local y, más adelante, despleg
 | `/welten/[id]` | Lernwelt | Escenario animado, personaje guía con saludo hablado, camino de estaciones tipo aventura, sonido ambiente y premio final |
 | `/finder` | Buscador de profesoras | Búsqueda por CP/ciudad, filtros, mapa ilustrado, ficha y solicitud de contacto (datos de ejemplo) |
 | `/eltern` | Área de padres | Control parental (multiplicación) → progreso semanal, estados de ánimo, ajustes, guía para padres, tienda, descargas, blog, historia y FAQ |
+
+## Emmi, la guía (tour y preguntas)
+
+- **Tour la primera vez**, con voz suave en alemán y foco sobre cada elemento: menú principal (tras la bienvenida),
+  primera Lernwelt, panel del Studio y editor. Se puede aceptar, posponer (“Später”) o saltar (“Überspringen”, `Esc`).
+  En escritorio, *„Neu: Emmi zeigt dir alles“* (panel de presentación) lo repite.
+- **Preguntas**: Emmi en la cabecera (app) o *Frag Emmi* abajo a la derecha (Studio). Entiende alemán (también
+  formas flexionadas y algunas palabras en español/inglés), responde con voz, propone ideas y botones para ir
+  directo. Conoce el contexto: nombre del niño, estrellas y stickers, hora del día (recomienda Guten-Morgen-Yoga o la
+  Traumreise), y en el editor del Studio **qué falta antes de publicar**. Para emociones (enfado, miedo, tristeza)
+  sugiere respiraciones y animar a hablar con un adulto. Micrófono para preguntar hablando (Chrome/Edge).
+- Contenido y tours en `src/content/guide.ts`; el “cerebro” en `src/lib/guide/brain.ts` (sin internet). Ahí se puede
+  conectar más adelante una IA real (p. ej. Claude a través de una API route en Vercel, con instrucciones seguras
+  para niños) sin cambiar la interfaz.
 
 Detalles profesionales incluidos: transiciones nativas entre pantallas (View Transitions con “morph” del personaje
 desde la tarjeta), control parental antes de cualquier enlace externo o compra (requisito de Apple/Google para apps
@@ -105,14 +121,20 @@ Para verlo en el **móvil**: conecta el móvil a la misma Wi‑Fi y abre `http:/
 npm run paquete -- --destino "C:\ruta\avances"   # sin --destino → dist/
 ```
 
-Genera `YOGITIER_avance_<fecha>.zip` y un `INSTRUCTIVO.txt` (en español) en la carpeta indicada. Quien lo recibe
-solo tiene que extraer el ZIP y hacer doble clic en **`Iniciar YOGITIER.bat`**: el paquete trae un Node.js portátil,
-la app ya compilada (`output: "standalone"`, solo al empaquetar) y el código fuente. Arranca en
-`http://localhost:3100` y abre el navegador. En Mac/Linux, con Node.js instalado: `node runtime/iniciar.mjs`.
+Genera dos ZIP y un `INSTRUCTIVO.txt` (en español) en la carpeta indicada:
+
+| ZIP | Cómo se abre |
+|---|---|
+| `YOGITIER_avance_<fecha>_HTML.zip` (~3 MB) | Extraer y doble clic en **`YOGITIER.html`**: funciona desde la carpeta, sin servidor ni instalación |
+| `YOGITIER_avance_<fecha>.zip` (~53 MB) | Extraer y doble clic en **`Iniciar YOGITIER.bat`**: Node.js portátil + la app compilada (`output: "standalone"`, solo al empaquetar) + código fuente; abre `http://localhost:3100`. Mac/Linux: `node runtime/iniciar.mjs` |
+
+La **versión HTML** (`npm run html` → `dist/html/`) se compila con esbuild desde el mismo código de `src/`: solo
+`next/link`, `next/image`, `next/navigation` y `next/font` se sustituyen por versiones de navegador
+(`scripts/html/shims`), las rutas usan `#/…` y el CSS sale del último `next build`. No toca la app de Next.js.
 El texto del instructivo está en `scripts/paquete/INSTRUCTIVO.txt`.
 
-> Pesa unos 50 MB por el Node.js incluido: compártelo por Drive, OneDrive o WeTransfer (Gmail bloquea ZIPs con
-> `.bat` o `.exe`).
+> El ZIP con servidor pesa unos 50 MB por el Node.js incluido: compártelo por Drive, OneDrive o WeTransfer (Gmail
+> bloquea ZIPs con `.bat` o `.exe`). El ZIP HTML es pequeño y fácil de enviar.
 
 ### Consejos para la demo
 
@@ -121,7 +143,8 @@ El texto del instructivo está en `scripts/paquete/INSTRUCTIVO.txt`.
   plantilla → subir un vídeo propio (p. ej. grabado con el móvil) → añadir una pausa interactiva → cambiar el escenario
   y mirar la vista previa en vivo → **Veröffentlichen** → volver a la app: ya aparece en *Besonderes*.
 - Haz la demo del Studio y de la app **en el mismo navegador** (ver “Cómo se guarda en el prototipo”).
-- **Primera visita:** aparece la bienvenida (nombre del niño y animal favorito).
+- **Primera visita:** aparece la bienvenida (nombre del niño y animal favorito) y después **Emmi ofrece el tour**.
+  Para repetirlo: botón *„Neu: Emmi zeigt dir alles“* del panel o “Alle Daten löschen” en el área de padres.
 - **Área de padres** (candado arriba a la derecha): resolver la multiplicación → botón **“Demo-Daten laden”** para llenar
   el panel con 7 días de actividad de ejemplo. Allí mismo: “Begrüßung erneut zeigen” y “Alle Daten löschen”.
 - **Voz:** las voces más naturales están en **Microsoft Edge** (“Katja Online (Natural)”) y en Chrome (“Google Deutsch”).
@@ -150,11 +173,17 @@ src/
 │  ├─ poses/             # Ilustraciones SVG de las posturas (kid-figure.tsx)
 │  ├─ worlds/            # Lernwelten para niños: escenarios, camino, vídeo interactivo, estaciones
 │  ├─ studio/            # YOGITIER® Studio: panel, editor, mediateca, ajustes
+│  ├─ guide/             # Emmi: avatar animado, tour con foco, chat con voz y micrófono
 │  ├─ memo/ diary/ advent/ finder/ parents/ yoga/ animals/ onboarding/
 ├─ content/              # TODO el contenido en alemán (fácil de editar)
 ├─ lib/                  # store (localStorage), audio, ambientes, voz, estadísticas
-│  └─ studio/            # Datos del Studio: tipos, IndexedDB (db.ts) y acciones (store.ts)
+│  ├─ studio/            # Datos del Studio: tipos, IndexedDB (db.ts), acciones (store.ts), validación
+│  └─ guide/             # Emmi: estado, “cerebro” de preguntas y voz
 └─ assets/               # Personajes, posturas y logo (de las descargas oficiales de yogitier.de)
+scripts/
+├─ paquete.mjs           # npm run paquete → ZIPs para compartir
+├─ paquete/              # Instructivo y lanzador del paquete con servidor
+└─ html/                 # Versión HTML: build con esbuild, shims de Next y router por hash
 ```
 
 ## Editar contenido
@@ -173,6 +202,7 @@ Todos los textos están en `src/content/` (en alemán), separados del código:
 | `teachers.ts` | Profesoras **de ejemplo (ficticias)** del buscador |
 | `brand.ts` | Tienda, descargas, blog, historia, valores, FAQ, enlaces legales |
 | `worlds.ts` | Escenarios, sonidos, categorías, plantillas y las Lernwelten de ejemplo del Studio |
+| `guide.ts` | Emmi: los 4 tours, temas de preguntas y respuestas, ideas y saludos |
 
 Para añadir una postura nueva sin ilustración, define sus articulaciones en `src/components/poses/kid-figure.tsx`.
 
@@ -200,6 +230,8 @@ git push origin main && git push kracnaro main
 
 - **Studio en la nube:** vídeos en Vercel Blob (o Mux para streaming adaptativo), base de datos para las Lernwelten,
   **usuarios con roles** (administración, editor, profesora) en lugar del PIN, publicación programada y estadísticas de uso.
+- **Emmi con IA real**: respuestas abiertas con un modelo de lenguaje (API route en el servidor, filtros y tono para
+  niños), voces grabadas o neuronales y más tours (padres, primera clase).
 - **Cuentas y sincronización** entre dispositivos (p. ej. Supabase o Firebase) en lugar de `localStorage`.
 - **CMS** para que YOGITIER edite clases, textos y temporadas sin programar.
 - **Tienda real** vía Shopify Storefront API (yogitier.de funciona con Shopify): esterillas y packs dentro del área de padres.

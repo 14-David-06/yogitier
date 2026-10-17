@@ -43,6 +43,7 @@ import { cn } from "@/lib/cn";
 import { speak } from "@/lib/speech";
 import { cloneSteps, duplicateWorld, removeWorld, saveSettings, saveWorld, useStudio, worldMinutes } from "@/lib/studio/store";
 import type { Ambient, Step, StepType, World, WorldCategory, WorldTheme } from "@/lib/studio/types";
+import { validateWorld } from "@/lib/studio/validate";
 
 import { StepEditor } from "./step-editor";
 import { Button, Card, Field, Input, Select, StatusBadge, Textarea } from "./ui";
@@ -108,25 +109,6 @@ function summary(step: Step, mediaName: (id: string) => string | undefined): str
     case "aufgabe":
       return `${step.count}× ${step.unit} · ${step.text || "Noch kein Text"}`;
   }
-}
-
-/** Hinweise vor dem Veröffentlichen */
-function validate(w: World): string[] {
-  const issues: string[] = [];
-  if (!w.title.trim()) issues.push("Titel fehlt");
-  if (w.steps.length === 0) issues.push("Mindestens eine Station hinzufügen");
-  w.steps.forEach((s, i) => {
-    const n = `Station ${i + 1}`;
-    if (s.type === "video" && !s.source) issues.push(`${n}: Kein Video ausgewählt`);
-    if (s.type === "info" && !s.text.trim()) issues.push(`${n}: Text fehlt`);
-    if (s.type === "quiz") {
-      if (!s.question.trim()) issues.push(`${n}: Quiz-Frage fehlt`);
-      if (s.options.some((o) => !o.text.trim())) issues.push(`${n}: Nicht alle Antworten ausgefüllt`);
-      if (!s.options.some((o) => o.id === s.correct)) issues.push(`${n}: Richtige Antwort markieren`);
-    }
-    if (s.type === "aufgabe" && !s.text.trim()) issues.push(`${n}: Missions-Text fehlt`);
-  });
-  return issues;
 }
 
 const SCALE = 0.8;
@@ -221,7 +203,7 @@ export function WorldEditor({ id }: { id: string }) {
       return { ...w, steps };
     });
 
-  const issues = validate(world);
+  const issues = validateWorld(world);
   const published = world.status === "veroeffentlicht";
   const featured = studio.settings.featuredWorldId === world.id;
   const mediaName = (mid: string) => studio.media.find((m) => m.id === mid)?.name;
@@ -297,7 +279,7 @@ export function WorldEditor({ id }: { id: string }) {
           >
             <Trash2 className="size-4" aria-hidden /> <span className="hidden sm:inline">Löschen</span>
           </Button>
-          <Button variant="primary" onClick={togglePublish}>
+          <Button variant="primary" onClick={togglePublish} data-tour="editor-veroeffentlichen">
             {published ? <EyeOff className="size-4" aria-hidden /> : <Rocket className="size-4" aria-hidden />} {published ? "Zurückziehen" : "Veröffentlichen"}
           </Button>
         </div>
@@ -319,7 +301,7 @@ export function WorldEditor({ id }: { id: string }) {
           )}
 
           {/* 1. Grunddaten */}
-          <Card title="1 · Grunddaten" subtitle="Worum geht es und für wen ist die Lernwelt?">
+          <Card tour="editor-grunddaten" title="1 · Grunddaten" subtitle="Worum geht es und für wen ist die Lernwelt?">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <Field label="Titel">
                 <Input value={world.title} onChange={(e) => set("title", e.target.value)} maxLength={48} />
@@ -373,7 +355,7 @@ export function WorldEditor({ id }: { id: string }) {
           </Card>
 
           {/* 2. Umgebung */}
-          <Card title="2 · Umgebung gestalten" subtitle="Szene, Farbe, Klang und Belohnung – damit sich jede Lernwelt wie ein eigener Ort anfühlt.">
+          <Card tour="editor-umgebung" title="2 · Umgebung gestalten" subtitle="Szene, Farbe, Klang und Belohnung – damit sich jede Lernwelt wie ein eigener Ort anfühlt.">
             <p className="text-[13px] font-bold text-ink">Szene</p>
             <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {(Object.keys(worldThemes) as WorldTheme[]).map((th) => (
@@ -442,7 +424,7 @@ export function WorldEditor({ id }: { id: string }) {
           </Card>
 
           {/* 3. Lernpfad */}
-          <Card title="3 · Lernpfad" subtitle="Stationen in der Reihenfolge, in der die Kinder sie erleben. Mischt Schauen, Mitmachen und Nachdenken.">
+          <Card tour="editor-lernpfad" title="3 · Lernpfad" subtitle="Stationen in der Reihenfolge, in der die Kinder sie erleben. Mischt Schauen, Mitmachen und Nachdenken.">
             {world.steps.length === 0 && (
               <p className="mb-3 rounded-[16px] bg-cream p-4 text-[13.5px] font-medium text-ink-soft">Noch keine Stationen. Fügt unten die erste hinzu – z. B. ein Video mit Mitmach-Stopps.</p>
             )}
@@ -546,7 +528,7 @@ export function WorldEditor({ id }: { id: string }) {
           </Card>
         </div>
 
-        <aside className="xl:sticky xl:top-24 xl:self-start">
+        <aside className="xl:sticky xl:top-24 xl:self-start" data-tour="editor-vorschau">
           <p className="mb-3 flex items-center justify-center gap-2 text-[13px] font-bold text-ink-soft">
             <Eye className="size-4" aria-hidden /> Live-Vorschau
           </p>

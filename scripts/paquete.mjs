@@ -1,5 +1,6 @@
-// Baut ein ZIP, das sich auf einem Windows-PC ohne Installation ausprobieren lässt:
-// eigenständiger Next.js-Server + portables Node.js + Starter + Anleitung (Spanisch) + Quellcode.
+// Baut zwei ZIPs zum Ausprobieren ohne Installation (mit Anleitung auf Spanisch):
+//  • YOGITIER_avance_<fecha>_HTML.zip – „YOGITIER.html“ per Doppelklick öffnen (scripts/html)
+//  • YOGITIER_avance_<fecha>.zip      – eigenständiger Next.js-Server + portables Node.js + Starter + Quellcode
 //
 //   npm run paquete                                → dist/
 //   npm run paquete -- --destino "C:\…\avances"    → in diesen Ordner
@@ -8,19 +9,23 @@ import { copyFileSync, cpSync, existsSync, mkdirSync, readFileSync, readdirSync,
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { buildHtml } from "./html/build.mjs";
+
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const vorlagen = path.join(repo, "scripts", "paquete");
 const argDestino = process.argv.indexOf("--destino");
 const destino = path.resolve(argDestino > 1 && process.argv[argDestino + 1] ? process.argv[argDestino + 1] : path.join(repo, "dist"));
 
 const CARPETA = "YOGITIER-Prototipo";
+const CARPETA_HTML = "YOGITIER-HTML";
 // Gleicher Port wie in scripts/paquete/iniciar.mjs
 const PUERTO = 3100;
 const hoy = new Date();
 const zwei = (n) => String(n).padStart(2, "0");
 const fechaIso = `${hoy.getFullYear()}-${zwei(hoy.getMonth() + 1)}-${zwei(hoy.getDate())}`;
 const fecha = `${zwei(hoy.getDate())}/${zwei(hoy.getMonth() + 1)}/${hoy.getFullYear()}`;
-const zipNombre = `YOGITIER_avance_${fechaIso}.zip`;
+const zipServidor = `YOGITIER_avance_${fechaIso}.zip`;
+const zipHtml = `YOGITIER_avance_${fechaIso}_HTML.zip`;
 
 const staging = path.join(repo, "dist", ".paquete");
 const raiz = path.join(staging, CARPETA);
@@ -48,8 +53,8 @@ if (build.status !== 0) process.exit(build.status ?? 1);
 const standalone = path.join(repo, ".next", "standalone");
 if (!existsSync(path.join(standalone, "server.js"))) throw new Error("Falta .next/standalone/server.js (revisa `output` en next.config.ts).");
 
-// 2. App: Server + statische Dateien (kopiert der Standalone-Build nicht selbst)
-paso("Armando la carpeta…");
+// 2. Server-Version: Server + statische Dateien (kopiert der Standalone-Build nicht selbst)
+paso("Armando la versión con servidor…");
 rmSync(staging, { recursive: true, force: true });
 cpSync(standalone, app, { recursive: true, dereference: true });
 cpSync(path.join(repo, ".next", "static"), path.join(app, ".next", "static"), { recursive: true });
@@ -61,7 +66,7 @@ for (const paquete of ["@img/sharp-wasm32", "@emnapi/runtime"]) {
   if (existsSync(origen) && !existsSync(ziel)) cpSync(origen, ziel, { recursive: true });
 }
 
-// 3. Portables Node.js + Starter
+// Portables Node.js + Starter
 const runtime = path.join(raiz, "runtime");
 mkdirSync(runtime, { recursive: true });
 copyFileSync(process.execPath, path.join(runtime, path.basename(process.execPath)));
@@ -94,17 +99,7 @@ const bat = [
 ];
 writeFileSync(path.join(raiz, "Iniciar YOGITIER.bat"), bat.join("\r\n") + "\r\n");
 
-// 4. Anleitung (UTF-8 mit BOM und CRLF, damit der Windows-Editor sie sicher richtig anzeigt)
-const instructivo =
-  "\uFEFF" +
-  readFileSync(path.join(vorlagen, "INSTRUCTIVO.txt"), "utf8")
-    .replaceAll("{{FECHA}}", fecha)
-    .replaceAll("{{COMMIT}}", commit)
-    .replaceAll("{{PUERTO}}", String(PUERTO))
-    .replace(/\r?\n/g, "\r\n");
-writeFileSync(path.join(raiz, "INSTRUCTIVO.txt"), instructivo);
-
-// 5. Quellcode: alle Dateien, die Git kennt oder nicht ignoriert (Stand des Arbeitsverzeichnisses)
+// Quellcode: alle Dateien, die Git kennt oder nicht ignoriert (Stand des Arbeitsverzeichnisses)
 paso("Copiando el código fuente…");
 const fuentes = git("ls-files", "-z", "--cached", "--others", "--exclude-standard").split("\0").filter(Boolean);
 for (const rel of fuentes) {
@@ -115,7 +110,24 @@ for (const rel of fuentes) {
   copyFileSync(origen, ziel);
 }
 
-// 6. Prüfen: Windows-Explorer scheitert an Pfaden über 260 Zeichen
+// 3. HTML-Version (gleicher Quellcode, ohne Server)
+paso("Generando la versión HTML…");
+const html = await buildHtml(path.join(staging, CARPETA_HTML));
+
+// 4. Anleitung in beide Pakete (UTF-8 mit BOM und CRLF, damit der Windows-Editor sie sicher richtig anzeigt)
+const instructivo =
+  "\uFEFF" +
+  readFileSync(path.join(vorlagen, "INSTRUCTIVO.txt"), "utf8")
+    .replaceAll("{{FECHA}}", fecha)
+    .replaceAll("{{COMMIT}}", commit)
+    .replaceAll("{{PUERTO}}", String(PUERTO))
+    .replaceAll("{{ZIP_HTML}}", zipHtml)
+    .replaceAll("{{ZIP_SERVIDOR}}", zipServidor)
+    .replace(/\r?\n/g, "\r\n");
+writeFileSync(path.join(raiz, "INSTRUCTIVO.txt"), instructivo);
+writeFileSync(path.join(html, "INSTRUCTIVO.txt"), instructivo);
+
+// 5. Prüfen: Windows-Explorer scheitert an Pfaden über 260 Zeichen
 const rutas = [];
 const recorrer = (dir) => {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
@@ -125,26 +137,31 @@ const recorrer = (dir) => {
   }
 };
 recorrer(raiz);
+recorrer(html);
 const masLarga = rutas.reduce((a, b) => (b.length > a.length ? b : a), "");
 if (masLarga.length > 170) console.warn(`Aviso: ruta interna de ${masLarga.length} caracteres (${masLarga}). Al extraer en carpetas profundas podría superar el límite de Windows.`);
 
-// 7. ZIP
+// 6. ZIPs
 paso("Comprimiendo…");
-const zipTemporal = path.join(staging, zipNombre);
-if (process.platform === "win32") {
-  const tar = path.join(process.env.SystemRoot ?? "C:\\Windows", "System32", "tar.exe");
-  execFileSync(tar, ["-a", "-c", "-f", zipNombre, CARPETA], { cwd: staging, stdio: "inherit" });
-} else {
-  execFileSync("zip", ["-qrX", zipNombre, CARPETA], { cwd: staging, stdio: "inherit" });
-}
 mkdirSync(destino, { recursive: true });
-copyFileSync(zipTemporal, path.join(destino, zipNombre));
+const zip = (carpeta, nombre) => {
+  if (process.platform === "win32") {
+    const tar = path.join(process.env.SystemRoot ?? "C:\\Windows", "System32", "tar.exe");
+    execFileSync(tar, ["-a", "-c", "-f", nombre, carpeta], { cwd: staging, stdio: "inherit" });
+  } else {
+    execFileSync("zip", ["-qrX", nombre, carpeta], { cwd: staging, stdio: "inherit" });
+  }
+  copyFileSync(path.join(staging, nombre), path.join(destino, nombre));
+  return (statSync(path.join(staging, nombre)).size / 1024 / 1024).toFixed(1);
+};
+const mbHtml = zip(CARPETA_HTML, zipHtml);
+const mbServidor = zip(CARPETA, zipServidor);
 writeFileSync(path.join(destino, "INSTRUCTIVO.txt"), instructivo);
-const mb = (statSync(zipTemporal).size / 1024 / 1024).toFixed(1);
 rmSync(staging, { recursive: true, force: true });
 
 console.log(`
-✓ Paquete listo (${rutas.length} archivos, ruta interna más larga: ${masLarga.length} caracteres)
-  ${path.join(destino, zipNombre)}  (${mb} MB)
+✓ Paquetes listos (${rutas.length} archivos, ruta interna más larga: ${masLarga.length} caracteres)
+  ${path.join(destino, zipHtml)}  (${mbHtml} MB) – doble clic en YOGITIER.html
+  ${path.join(destino, zipServidor)}  (${mbServidor} MB) – con servidor (Iniciar YOGITIER.bat)
   ${path.join(destino, "INSTRUCTIVO.txt")}
 `);

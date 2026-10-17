@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import logo from "@/assets/brand/logo.png";
+import { EmmiPitchButton } from "@/components/guide/pitch-button";
 import { animalsById } from "@/content/animals";
 
 const FEATURES = [
@@ -51,9 +52,11 @@ export function PitchPanel() {
         ))}
       </ul>
 
+      <EmmiPitchButton />
+
       <Link
         href="/admin"
-        className="group mt-3 flex items-center gap-3 rounded-2xl bg-ink p-3 text-white shadow-lg shadow-ink/20 transition hover:bg-ink-strong short:mt-2"
+        className="group mt-2 flex items-center gap-3 rounded-2xl bg-ink p-3 text-white shadow-lg shadow-ink/20 transition hover:bg-ink-strong short:mt-2"
       >
         <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white/15">
           <Clapperboard className="size-5" strokeWidth={1.8} aria-hidden />

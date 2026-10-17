@@ -8,6 +8,7 @@
     "start": "next start",
     "demo": "next build && next start",
     "paquete": "node scripts/paquete.mjs",
+    "html": "next build && node scripts/html/build.mjs",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run build"
@@ -26,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "esbuild": "^0.28.2",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",

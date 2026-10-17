@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { Suspense, useState, useSyncExternalStore, type ReactNode } from "react";
 
 import logo from "@/assets/brand/logo.png";
+import { Guide } from "@/components/guide/guide";
 import { animalsById } from "@/content/animals";
 import { cn } from "@/lib/cn";
 import { useStudio } from "@/lib/studio/store";
@@ -151,7 +152,7 @@ export function StudioShell({ children }: { children: ReactNode }) {
               <Image src={logo} alt="YOGITIER®" className="h-7 w-auto" loading="eager" />
               <span className="rounded-full bg-meditation px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-lilac-ink">Studio</span>
             </div>
-            <nav aria-label="Studio" className="no-scrollbar flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-1 lg:flex-col lg:overflow-visible lg:pb-0">
+            <nav aria-label="Studio" data-tour="studio-nav" className="no-scrollbar flex gap-1 overflow-x-auto px-3 pb-3 lg:flex-1 lg:flex-col lg:overflow-visible lg:pb-0">
               <Suspense fallback={<NavLinks />}>
                 <ActiveNav />
               </Suspense>
@@ -167,6 +168,7 @@ export function StudioShell({ children }: { children: ReactNode }) {
           </aside>
           <main className="min-w-0 flex-1 px-5 py-6 sm:px-8 lg:py-10">{children}</main>
         </div>
+        <Guide area="studio" enabled={authed === true} />
       </div>
     </>
   );

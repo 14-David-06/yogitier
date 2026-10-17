@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Guide } from "@/components/guide/guide";
+
 import { DeviceChrome } from "./device-chrome";
 import { PitchPanel, StageDecor } from "./pitch-panel";
 
@@ -15,6 +17,7 @@ export function DeviceFrame({ children }: { children: ReactNode }) {
       <div className="device">
         <div id="app-screen" className="app-screen">
           {children}
+          <Guide area="kids" />
           <DeviceChrome />
         </div>
       </div>

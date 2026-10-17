@@ -57,17 +57,17 @@ export function Dashboard() {
         subtitle="Gestaltet Lernwelten, ladet Anleitungsvideos hoch und veröffentlicht sie mit einem Klick in der Kinder-App."
         actions={
           <>
-            <Button onClick={() => window.open("/", "_blank")}>
+            <Button onClick={() => window.open("/", "_blank")} data-tour="studio-app">
               <Smartphone className="size-4" aria-hidden /> App ansehen
             </Button>
-            <Button variant="primary" onClick={newWorld} disabled={!studio.ready}>
+            <Button variant="primary" onClick={newWorld} disabled={!studio.ready} data-tour="studio-neu">
               <PlusCircle className="size-4" aria-hidden /> Neue Lernwelt
             </Button>
           </>
         }
       />
 
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4" data-tour="studio-kpis">
         <Kpi icon={Globe} label="Lernwelten" value={String(studio.worlds.length)} hint={`${published.length} live · ${drafts} Entwürfe`} />
         <Kpi icon={Clapperboard} label="Videos" value={String(videos.length)} hint={videos.length ? `${formatDuration(videoSeconds)} Min. Material` : "Noch keine Uploads"} />
         <Kpi icon={HardDrive} label="Speicher" value={storage ? formatBytes(storage.usage) : "–"} hint={storage?.quota ? `von ${formatBytes(storage.quota)} im Browser` : "lokal im Browser"} />

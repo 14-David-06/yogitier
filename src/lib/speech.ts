@@ -11,10 +11,15 @@ export function speechSupported(): boolean {
   return typeof window !== "undefined" && "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
 }
 
-function pickVoice(): SpeechSynthesisVoice | null {
+function pickVoice(prefer: RegExp[] = []): SpeechSynthesisVoice | null {
   const voices = window.speechSynthesis.getVoices().filter((v) => v.lang?.toLowerCase().startsWith("de"));
   if (!voices.length) return null;
+  const preferred = (v: SpeechSynthesisVoice) => {
+    const i = prefer.findIndex((p) => p.test(v.name));
+    return i < 0 ? 0 : (prefer.length - i) * 10;
+  };
   const score = (v: SpeechSynthesisVoice) =>
+    preferred(v) +
     (/natural|neural|online/i.test(v.name) ? 6 : 0) +
     (/google/i.test(v.name) ? 3 : 0) +
     (/katja|amala|seraphina|vicki|anna|petra|marlene|hedda|helena/i.test(v.name) ? 2 : 0) +
@@ -31,21 +36,24 @@ type SpeakOptions = {
   /** auch vorlesen, wenn die Vorlesestimme in den Einstellungen aus ist */
   force?: boolean;
   rate?: number;
+  pitch?: number;
+  /** bevorzugte Stimmen (Namensmuster, wichtigste zuerst) */
+  prefer?: RegExp[];
   /** interrupted = true, wenn die Ausgabe abgebrochen wurde */
   onEnd?: (interrupted: boolean) => void;
 };
 
-export function speak(text: string, { force = false, rate = 0.92, onEnd }: SpeakOptions = {}): boolean {
+export function speak(text: string, { force = false, rate = 0.92, pitch = 1.05, prefer, onEnd }: SpeakOptions = {}): boolean {
   if (!speechSupported()) return false;
   if (!force && !getAppState().settings.voice) return false;
   const synth = window.speechSynthesis;
   synth.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = "de-DE";
-  const voice = pickVoice();
+  const voice = pickVoice(prefer);
   if (voice) utterance.voice = voice;
   utterance.rate = rate;
-  utterance.pitch = 1.05;
+  utterance.pitch = pitch;
   if (onEnd) {
     let done = false;
     utterance.onend = () => {
