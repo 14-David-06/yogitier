@@ -12,8 +12,8 @@ Se prueba en local y no hay que instalar nada.
 1) Clic derecho sobre el ZIP > "Extraer todo..." > Extraer.
    Hay que extraerlo primero: desde dentro del ZIP no arranca.
 2) En la carpeta "YOGITIER-Prototipo", doble clic en "Iniciar YOGITIER.bat".
-   Si Windows avisa ("Windows protegió su PC"), pulsa "Más información" >
-   "Ejecutar de todas formas".
+   Si Windows muestra un aviso de seguridad, pulsa "Más información" >
+   "Ejecutar de todas formas" (o "Ejecutar", según el aviso).
 3) Se abre una ventana negra y, a los pocos segundos, el navegador con
    http://localhost:{{PUERTO}}
    Deja la ventana negra abierta mientras pruebas. Para terminar, ciérrala.

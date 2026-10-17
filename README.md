@@ -111,7 +111,7 @@ la app ya compilada (`output: "standalone"`, solo al empaquetar) y el código fu
 `http://localhost:3100` y abre el navegador. En Mac/Linux, con Node.js instalado: `node runtime/iniciar.mjs`.
 El texto del instructivo está en `scripts/paquete/INSTRUCTIVO.txt`.
 
-> Pesa unos 60 MB por el Node.js incluido: compártelo por Drive, OneDrive o WeTransfer (Gmail bloquea ZIPs con
+> Pesa unos 50 MB por el Node.js incluido: compártelo por Drive, OneDrive o WeTransfer (Gmail bloquea ZIPs con
 > `.bat` o `.exe`).
 
 ### Consejos para la demo
