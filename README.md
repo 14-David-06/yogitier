@@ -158,7 +158,13 @@ npm run lint        # ESLint (incluye las reglas del React Compiler)
 npm run typecheck   # TypeScript
 npm run build       # build de producción (92 páginas pregeneradas)
 npm run check       # los tres seguidos
+npm run e2e         # 24 pruebas de extremo a extremo (Playwright + Microsoft Edge) contra http://localhost:3000
 ```
+
+`npm run e2e` recorre la app infantil (12 flujos), el Studio (5), el final de una Lernwelt y Emmi (6), y guarda
+capturas en `dist/e2e/`. Con la variable `BASE` se prueba otra instancia, p. ej. en PowerShell
+`$env:BASE="http://localhost:3100"; npm run e2e` (paquete con servidor) o
+`$env:BASE="file:///C:/ruta/YOGITIER-HTML/YOGITIER.html#"; npm run e2e` (versión HTML).
 
 ## Estructura
 
@@ -184,6 +190,7 @@ scripts/
 ├─ paquete.mjs           # npm run paquete → ZIPs para compartir
 ├─ paquete/              # Instructivo y lanzador del paquete con servidor
 └─ html/                 # Versión HTML: build con esbuild, shims de Next y router por hash
+tests/e2e/                # Pruebas E2E (npm run e2e)
 ```
 
 ## Editar contenido
