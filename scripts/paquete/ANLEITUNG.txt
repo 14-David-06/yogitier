@@ -1,0 +1,112 @@
+YOGITIER - Prototyp · Stand vom {{DATUM}}
+=============================================
+(Versión en español: INSTRUCTIVO.txt)
+
+Kinder-App für Yoga und Achtsamkeit (auf Deutsch) und YOGITIER Studio – der
+Bereich, in dem Administratoren Anleitungsvideos hochladen und „Lernwelten“
+gestalten, mit denen Kinder gesunde Gewohnheiten aktiv und spielerisch lernen.
+Neu: Emmi, eine Begleiterin in Gestalt eines Einhorns, führt mit Stimme durch
+die App und beantwortet Fragen. Es muss nichts installiert werden.
+
+
+1. ÖFFNEN (zwei Möglichkeiten)
+------------------------------
+MÖGLICHKEIT A · Am einfachsten: HTML-Version   ({{ZIP_HTML}})
+1) Rechtsklick auf die ZIP-Datei > „Alle extrahieren…“ > Extrahieren.
+2) Den Ordner „YOGITIER-HTML“ öffnen und „YOGITIER.html“ doppelklicken.
+   Die App öffnet sich im Browser. Der Ordner „archivos“ (Dateien) muss
+   neben der HTML-Datei bleiben.
+
+MÖGLICHKEIT B · Mit lokalem Server   ({{ZIP_SERVIDOR}})
+Genau die Version, die später im Internet veröffentlicht wird.
+1) Rechtsklick auf die ZIP-Datei > „Alle extrahieren…“ > Extrahieren.
+2) Im Ordner „YOGITIER-Prototipo“ die Datei „Iniciar YOGITIER.bat“
+   doppelklicken. Zeigt Windows einen Sicherheitshinweis, auf „Weitere
+   Informationen“ > „Trotzdem ausführen“ (bzw. „Ausführen“) klicken.
+3) Ein schwarzes Fenster öffnet sich und nach wenigen Sekunden der Browser
+   mit http://localhost:{{PUERTO}}
+   Das schwarze Fenster beim Testen geöffnet lassen; zum Beenden schließen.
+   Mac oder Linux: Node.js 20 oder neuer installieren (nodejs.org), im Ordner
+   „YOGITIER-Prototipo“ ein Terminal öffnen und ausführen:
+   node runtime/iniciar.mjs
+
+- Am besten in Microsoft Edge oder Google Chrome. Bitte den Ton einschalten:
+  Es gibt eine Vorlesestimme, Geräusche und Hintergrundklänge (mit Internet
+  klingt die Stimme natürlicher).
+
+
+2. WAS SIE AUSPROBIEREN KÖNNEN (ca. 10 Minuten)
+-----------------------------------------------
+Am Computer erscheint die App in einem Smartphone-Rahmen, links daneben eine
+Präsentationsfläche.
+
+Emmi, die Begleiterin
+ a) Nach der Begrüßung (Name und Lieblingstier des Kindes) bietet Emmi eine
+    Tour an: „Ja, zeig's mir!“ oder „Später“. Sie erklärt jeden Bereich mit
+    ihrer Stimme; „Überspringen“ beendet die Tour jederzeit.
+ b) Für Fragen Emmi oben im Bildschirm antippen, zum Beispiel:
+    „Was kann ich machen?“, „Ich bin wütend“ oder „Erzähl einen Witz“.
+    Emmi antwortet mit Stimme und bietet Knöpfe, die direkt zum passenden
+    Bereich führen. Über das Mikrofon kann man auch laut fragen.
+ c) Am Computer startet „Neu: Emmi zeigt dir alles“ (links) die Tour erneut.
+    Emmi begleitet auch durch das Studio und die erste Lernwelt.
+
+Kinder-App
+ d) Menü „Was möchtest du machen?“: Yoga, Meditation, Tierfreunde, Memo,
+    Tagebuch und Besonderes.
+ e) Besonderes > „Dschungel-Bewegungspause“: ein Pfad mit Stationen im
+    Dschungel. Nach 12 Sekunden hält das Video von selbst an („Jetzt du!“) –
+    mit Countdown und Stimme. Danach folgen eine Yoga-Übung, eine Tier-Parade
+    mit Timer, ein Quiz und eine Atemübung. Am Ende: Feier, Sterne und ein
+    Sticker fürs Album.
+ f) Weitere Lernwelten, jede mit eigener Umgebung und eigenem Klang:
+    Zähneputzen, Wasser trinken und eine Traumreise zum Einschlafen.
+ g) Das Schloss (oben rechts) öffnet den Eltern-Bereich nach einer kleinen
+    Rechenaufgabe. „Demo-Daten laden“ füllt ihn mit einer Beispielwoche.
+
+YOGITIER Studio (Verwaltung)
+ h) Knopf „YOGITIER Studio für Admins“ links (oder die Adresse .../admin).
+    PIN: 1234. Emmi bietet eine Studio-Tour an; unten rechts ist „Frag Emmi“.
+    Fragen Sie in einer geöffneten Lernwelt „Was fehlt noch?“ – Emmi nennt,
+    was vor dem Veröffentlichen noch fehlt.
+ i) Lernwelten > eine Lernwelt öffnen > „Umgebung gestalten“: Szene
+    (Dschungel, Unterwasser, Weltraum, Zauberwald, Sommerwiese, Winterland,
+    Regenbogenland, Strand), Farbe, Hintergrundklang („Probe“ zum Anhören)
+    und Begleiter ändern. Die Vorschau im Smartphone ändert sich sofort.
+ j) „Neue Lernwelt“ > Vorlage „Bewegungspause“. In der Station
+    „Mitmach-Video“ unter „Hochladen“ ein eigenes MP4-Video hochladen,
+    abspielen und „Stopp an aktueller Stelle“ klicken, um eine
+    „Jetzt du!“-Pause einzufügen.
+ k) „Veröffentlichen“ und mit „App öffnen“ zur App wechseln: Die neue
+    Lernwelt erscheint sofort unter Besonderes.
+
+
+3. GUT ZU WISSEN
+----------------
+- Prototyp ohne Cloud: Profil, Fortschritt, Lernwelten und Videos werden im
+  Browser dieses Computers gespeichert. Bitte immer denselben Browser nutzen.
+  HTML-Version und Server-Version teilen ihre Daten nicht.
+- Emmi antwortet mit eingebautem Wissen (funktioniert ohne Internet). In der
+  fertigen Version kann eine echte künstliche Intelligenz angebunden werden.
+- Neu beginnen: Studio > Einstellungen > „Beispiel-Lernwelten
+  wiederherstellen“ oder „Studio zurücksetzen“. Im Eltern-Bereich:
+  „Alle Daten löschen“ (zeigt auch Emmis Touren erneut).
+- YouTube- und Vimeo-Videos lassen sich verlinken; „Jetzt du!“-Pausen
+  funktionieren aber nur mit hochgeladenen Videos oder MP4-Links.
+- Die Yogalehrerinnen in der Suche sind erfundene Beispielprofile.
+- Möglichkeit B: Ist Port {{PUERTO}} belegt, wird der nächste verwendet; das
+  schwarze Fenster zeigt die richtige Adresse.
+
+
+Inhalt
+  ANLEITUNG.txt / INSTRUCTIVO.txt   diese Anleitung auf Deutsch / Spanisch
+  {{ZIP_HTML}}
+    YOGITIER.html          öffnet die App (Doppelklick)
+    archivos\              App mit Bildern, Videos und Schriften
+  {{ZIP_SERVIDOR}}
+    Iniciar YOGITIER.bat   startet die App (Windows)
+    app\                   die fertig gebaute Anwendung (Next.js)
+    runtime\               portables Node.js und Starter
+    codigo-fuente\         Quellcode (Next.js + TypeScript):
+                           npm install  und dann  npm run dev
+  GitHub: https://github.com/Kracnaro/yogitier · Version {{COMMIT}}

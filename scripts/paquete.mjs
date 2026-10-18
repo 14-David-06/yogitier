@@ -1,4 +1,4 @@
-// Baut zwei ZIPs zum Ausprobieren ohne Installation (mit Anleitung auf Spanisch):
+// Baut zwei ZIPs zum Ausprobieren ohne Installation (mit Anleitung auf Spanisch und Deutsch):
 //  • YOGITIER_avance_<fecha>_HTML.zip – „YOGITIER.html“ per Doppelklick öffnen (scripts/html)
 //  • YOGITIER_avance_<fecha>.zip      – eigenständiger Next.js-Server + portables Node.js + Starter + Quellcode
 //
@@ -24,6 +24,7 @@ const hoy = new Date();
 const zwei = (n) => String(n).padStart(2, "0");
 const fechaIso = `${hoy.getFullYear()}-${zwei(hoy.getMonth() + 1)}-${zwei(hoy.getDate())}`;
 const fecha = `${zwei(hoy.getDate())}/${zwei(hoy.getMonth() + 1)}/${hoy.getFullYear()}`;
+const datum = `${zwei(hoy.getDate())}.${zwei(hoy.getMonth() + 1)}.${hoy.getFullYear()}`;
 const zipServidor = `YOGITIER_avance_${fechaIso}.zip`;
 const zipHtml = `YOGITIER_avance_${fechaIso}_HTML.zip`;
 
@@ -114,18 +115,24 @@ for (const rel of fuentes) {
 paso("Generando la versión HTML…");
 const html = await buildHtml(path.join(staging, CARPETA_HTML));
 
-// 4. Anleitung in beide Pakete (UTF-8 mit BOM und CRLF, damit der Windows-Editor sie sicher richtig anzeigt)
-const instructivo =
+// 4. Anleitungen (Spanisch: INSTRUCTIVO.txt, Deutsch: ANLEITUNG.txt) in beide Pakete \u2013
+//    UTF-8 mit BOM und CRLF, damit der Windows-Editor sie sicher richtig anzeigt.
+const anleitungen = ["INSTRUCTIVO.txt", "ANLEITUNG.txt"].map((datei) => [
+  datei,
   "\uFEFF" +
-  readFileSync(path.join(vorlagen, "INSTRUCTIVO.txt"), "utf8")
-    .replaceAll("{{FECHA}}", fecha)
-    .replaceAll("{{COMMIT}}", commit)
-    .replaceAll("{{PUERTO}}", String(PUERTO))
-    .replaceAll("{{ZIP_HTML}}", zipHtml)
-    .replaceAll("{{ZIP_SERVIDOR}}", zipServidor)
-    .replace(/\r?\n/g, "\r\n");
-writeFileSync(path.join(raiz, "INSTRUCTIVO.txt"), instructivo);
-writeFileSync(path.join(html, "INSTRUCTIVO.txt"), instructivo);
+    readFileSync(path.join(vorlagen, datei), "utf8")
+      .replaceAll("{{FECHA}}", fecha)
+      .replaceAll("{{DATUM}}", datum)
+      .replaceAll("{{COMMIT}}", commit)
+      .replaceAll("{{PUERTO}}", String(PUERTO))
+      .replaceAll("{{ZIP_HTML}}", zipHtml)
+      .replaceAll("{{ZIP_SERVIDOR}}", zipServidor)
+      .replace(/\r?\n/g, "\r\n"),
+]);
+for (const [datei, text] of anleitungen) {
+  writeFileSync(path.join(raiz, datei), text);
+  writeFileSync(path.join(html, datei), text);
+}
 
 // 5. Prüfen: Windows-Explorer scheitert an Pfaden über 260 Zeichen
 const rutas = [];
@@ -156,12 +163,12 @@ const zip = (carpeta, nombre) => {
 };
 const mbHtml = zip(CARPETA_HTML, zipHtml);
 const mbServidor = zip(CARPETA, zipServidor);
-writeFileSync(path.join(destino, "INSTRUCTIVO.txt"), instructivo);
+for (const [datei, text] of anleitungen) writeFileSync(path.join(destino, datei), text);
 rmSync(staging, { recursive: true, force: true });
 
 console.log(`
 ✓ Paquetes listos (${rutas.length} archivos, ruta interna más larga: ${masLarga.length} caracteres)
   ${path.join(destino, zipHtml)}  (${mbHtml} MB) – doble clic en YOGITIER.html
   ${path.join(destino, zipServidor)}  (${mbServidor} MB) – con servidor (Iniciar YOGITIER.bat)
-  ${path.join(destino, "INSTRUCTIVO.txt")}
+  ${path.join(destino, "INSTRUCTIVO.txt")} (español) · ANLEITUNG.txt (deutsch)
 `);

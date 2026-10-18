@@ -1,5 +1,6 @@
 YOGITIER - Prototipo · avance del {{FECHA}}
 ==============================================
+(Deutsche Version: ANLEITUNG.txt)
 
 App de yoga y mindfulness para niños (en alemán) y YOGITIER Studio, el panel
 donde el administrador sube vídeos instructivos y diseña "Lernwelten" (mundos
@@ -95,6 +96,7 @@ YOGITIER Studio (administración)
 
 
 Contenido
+  INSTRUCTIVO.txt / ANLEITUNG.txt   este instructivo en español / en alemán
   {{ZIP_HTML}}
     YOGITIER.html          abre la app (doble clic)
     archivos\              la app y sus imágenes, vídeos y fuentes

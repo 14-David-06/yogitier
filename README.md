@@ -121,7 +121,8 @@ Para verlo en el **móvil**: conecta el móvil a la misma Wi‑Fi y abre `http:/
 npm run paquete -- --destino "C:\ruta\avances"   # sin --destino → dist/
 ```
 
-Genera dos ZIP y un `INSTRUCTIVO.txt` (en español) en la carpeta indicada:
+Genera dos ZIP, un `INSTRUCTIVO.txt` (español) y un `ANLEITUNG.txt` (alemán) en la carpeta indicada; los dos textos
+van también dentro de cada ZIP:
 
 | ZIP | Cómo se abre |
 |---|---|
@@ -131,7 +132,7 @@ Genera dos ZIP y un `INSTRUCTIVO.txt` (en español) en la carpeta indicada:
 La **versión HTML** (`npm run html` → `dist/html/`) se compila con esbuild desde el mismo código de `src/`: solo
 `next/link`, `next/image`, `next/navigation` y `next/font` se sustituyen por versiones de navegador
 (`scripts/html/shims`), las rutas usan `#/…` y el CSS sale del último `next build`. No toca la app de Next.js.
-El texto del instructivo está en `scripts/paquete/INSTRUCTIVO.txt`.
+Los textos están en `scripts/paquete/INSTRUCTIVO.txt` y `scripts/paquete/ANLEITUNG.txt`.
 
 > El ZIP con servidor pesa unos 50 MB por el Node.js incluido: compártelo por Drive, OneDrive o WeTransfer (Gmail
 > bloquea ZIPs con `.bat` o `.exe`). El ZIP HTML es pequeño y fácil de enviar.
